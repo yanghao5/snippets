@@ -44,3 +44,16 @@ impl<T,U> Point<T,U> {
         }
     }
 }
+
+//3-2
+use std::fmt::Debug;
+// print any length arrary
+fn display_arr<T: Copy+Debug,const N:usize>(arr:[T;N]){
+    println!("{:?}",arr)
+}
+fn main() {
+    //let arr:[String;3]=[String::from("aaaaaaaaaaaaaaaaa"),String::from("bbbbbbbbbbbbbbbbbbbbb"),String::from("cccccccccccc")];
+    let arr=[1,2,3,4,5,6];
+    display_arr(arr);
+    println!("{:?}",arr);
+}

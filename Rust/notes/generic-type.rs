@@ -15,3 +15,32 @@ fn main() {
     let largest_char=largest(&char_list);
     println!("{} {}",largest_number,largest_char);
 }
+
+//3-1
+#[derive(Debug)]
+struct Point<T,U>{
+    x:T,
+    y:U,
+}
+fn main() {
+    let u32_str=Point{ x:5,y:"wtf?" };
+    let str_str=Point{x:"Bob",y:"Alice"};
+    println!("{}",u32_str.return_x());
+    println!("{}",str_str.return_y());
+    dbg!(u32_str.mixup(str_str));
+}
+
+impl<T,U> Point<T,U> {
+    fn return_x(&self)->&T{
+        &self.x
+    }
+    fn return_y(&self)->&U{
+        &self.y
+    }
+    fn mixup<V,W>(self,other:Point<V,W>)->Point<T,W>{
+        Point{
+            x:self.x,
+            y:other.y,
+        }
+    }
+}

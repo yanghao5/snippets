@@ -37,3 +37,36 @@ fn main() {
     println!("Post:{}",post.summarize());
     println!("Weibo:{}",weibo.summarize());
 }
+
+//6-1
+trait Draw{
+    fn draw(&self)->String;
+}
+
+impl Draw for i32{
+    fn draw(&self) -> String {
+        format!("i32:{}",*self)
+    }
+}
+
+impl Draw for f64{
+    fn draw(&self) -> String {
+        format!("f64:{}",*self)
+    }
+}
+
+fn draw1(x:Box<dyn Draw>){
+    x.draw();
+}
+fn draw2(y:&dyn Draw){
+    y.draw();
+}
+
+fn main() {
+    let x:i32=114514;
+    let y:f64=114.514;
+    draw1(Box::new(x));
+    draw1(Box::new(y));
+    draw2(&x);
+    draw2(&y);
+}

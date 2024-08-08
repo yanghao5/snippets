@@ -19,6 +19,7 @@ func executeCommand(command string, args []string) error {
 
 func main() {
 	// Define the commands you want to execute
+	// 第一个值应该是某个可执行文件的名称，不应该是包含空格的字符串
 	commands := [][]string{
 		{"echo", "Hello, World!"},
 		{"sleep", "10"}, // Example of a long-running command

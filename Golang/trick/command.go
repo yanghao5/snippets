@@ -4,9 +4,14 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
-func executeCommand(command string, args []string) error {
+func executeCommand(commandStr string) error {
+	parse := strings.Fields(commandStr)
+	command := parse[0]
+	args := parse[1:]
+
 	cmd := exec.Command(command, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -18,26 +23,29 @@ func executeCommand(command string, args []string) error {
 }
 
 func main() {
-	// Define the commands you want to execute
-	// 第一个值应该是某个可执行文件的名称，不应该是包含空格的字符串
-	commands := [][]string{
-		{"echo", "Hello, World!"},
-		{"sleep", "10"}, // Example of a long-running command
-		{"ls", "-la"},
-		{"pwd"},
-		// Add more commands as needed
+	// 获取环境变量中的密码
+	password := os.Getenv("DOCKER_ALIYUN_PASSWORD")
+	if password == "" {
+		fmt.Println("Environment variable DOCKER_ALIYUN_PASSWORD is not set")
+		return
+	}
+	
+	login_cmd := fmt.Sprintf("echo %s | docker login --username=xxxxx --password-stdin registry.aliyuncs.com", password)
+	
+	commands := []string{
+		//login_cmd,
+		"docker build --tag registry.aliyuncs.com/xxxxx/myalpine:01 .",
+		"docker push registry.aliyuncs.com/xxxxx/myalpine:01",
+		"docker rmi registry.aliyuncs.com/xxxxx/myalpine:01",
 	}
 
 	for _, cmd := range commands {
-		if len(cmd) > 0 {
-			command := cmd[0]
-			args := cmd[1:]
-			fmt.Printf("Executing command: %s %v\n", command, args)
-			err := executeCommand(command, args)
-			if err != nil {
-				fmt.Printf("Command failed: %v\n", err)
-				break
-			}
+
+		fmt.Printf("Executing command: %s\n", cmd)
+		err := executeCommand(cmd)
+		if err != nil {
+			fmt.Printf("Command failed: %v\n", err)
+			break
 		}
 	}
 }
